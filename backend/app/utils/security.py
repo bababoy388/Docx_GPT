@@ -13,7 +13,7 @@ class PasswordResult(TypedDict):
 ASCII_LOWER = set(string.ascii_lowercase)
 ASCII_UPPER = set(string.ascii_uppercase)
 ASCII_DIGITS = set(string.digits)
-ASCII_SYMBOLS = set(string.punctuation)  # ~32-33 символа
+ASCII_SYMBOLS = set(string.punctuation)
 
 def conservative_pool_size(chars: set[str]) -> int:
     pool = 0
@@ -25,10 +25,8 @@ def conservative_pool_size(chars: set[str]) -> int:
         pool += 10
     if chars & ASCII_SYMBOLS:
         pool += len(ASCII_SYMBOLS)
-    # Любой не-ASCII символ — добавим ограниченный бонус один раз,
-    # чтобы не раздувать оценку экзотическими наборами.
     if any(ord(c) > 0x7F for c in chars):
-        pool += 32  # скромный бонус за «униконы»
+        pool += 32
     return max(pool, 1)
 
 def shannon_bits(password: str) -> float:
@@ -40,11 +38,9 @@ def shannon_bits(password: str) -> float:
     for count in freq.values():
         p = count / n
         h -= p * math.log2(p)
-    # Шеннон на символ (бит/символ) * длина = биты строки
     return h * n
 
 def validate_password(password: str) -> PasswordResult:
-    # Нормализация Unicode
     password = unicodedata.normalize("NFKC", password)
 
     if len(password) < 8:
@@ -55,7 +51,6 @@ def validate_password(password: str) -> PasswordResult:
             "entropy_bits": 0.0,
         }
 
-    # простая проверка на излишние повторы
     if len(set(password)) / len(password) < 0.3:
         return {
             "valid": False,
@@ -67,10 +62,8 @@ def validate_password(password: str) -> PasswordResult:
     chars = set(password)
     pool = conservative_pool_size(chars)
     theoretical_bits = len(password) * math.log2(pool)
-    # Шеннон может помочь слегка штрафовать однообразие; весим его очень скромно
     entropy = 0.9 * theoretical_bits + 0.1 * shannon_bits(password)
 
-    # более строгие пороги
     if entropy < 40:
         return {"valid": False, "level": "too_weak", "message": "Слишком простой пароль", "entropy_bits": entropy}
     elif entropy < 55:

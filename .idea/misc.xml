@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.13 (WordGPT)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (WordGPT)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.12 (Docx_GPT)" project-jdk-type="Python SDK" />
 </project>

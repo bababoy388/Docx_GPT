@@ -12,13 +12,13 @@ class User(Base):
     email = Column(String)
 
 class Chat(Base):
-    __tablname__ = "chats"
+    __tablename__ = "chats"
 
     id = Column(String, primary_key=True)
     name_chat = Column(String)
 
 class ChatMessage(Base):
-    __tablname__ = "chat_message"
+    __tablename__ = "chat_message"
 
     id = Column(Integer, primary_key=True)
     id_chat = Column(String)
