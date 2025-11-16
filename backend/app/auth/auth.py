@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from backend.app.core.config import config
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return check_password_hash(hashed_password, plain_password)

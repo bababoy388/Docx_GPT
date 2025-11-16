@@ -27,20 +27,6 @@ def download_docx(docx_name: str):
                         media_type="application/vnd.openxmlformats.wordprocessingml.document"
                         )
 
-@router.post("/ask")
-def ask(text: str, username: str, docx_name: str, type_docx: str,
-        create_docx: bool = False, include_docx: bool = False):
-
-    if include_docx:
-        pass # добавить проверку на наличие документа юзера
-
-    docx_user = docx_worker.get_docx(username, docx_name, type_docx)
-    read_docx = parser_docx(docx_user)
-    message = read_docx + " " + text
-    answer = apigpt(message)
-
-    write_docx(answer, "D:\PyCharm\Project\Docx_GPT\\backend\data\\user_docx\CocoJambo\\user\Шаблон.docx")
-
 
 
 
